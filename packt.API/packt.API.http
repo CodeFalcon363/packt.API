@@ -1,0 +1,6 @@
+@packt.API_HostAddress = http://localhost:5147
+
+GET {{packt.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
