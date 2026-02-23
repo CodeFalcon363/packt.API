@@ -1,8 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using packt.API.Data;
 using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var ConnectionString = builder.Configuration.GetConnectionString("packtApiDBConnectionString");
+builder.Services.AddDbContext<PacktApiDBContext>(options => {
+    options.UseSqlServer(ConnectionString);
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
