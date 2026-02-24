@@ -2,6 +2,8 @@
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace packt.API.Migrations
 {
     /// <inheritdoc />
@@ -14,7 +16,8 @@ namespace packt.API.Migrations
                 name: "Countries",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShortName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -32,7 +35,8 @@ namespace packt.API.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CountryId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Rating = table.Column<double>(type: "float", nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,6 +47,26 @@ namespace packt.API.Migrations
                         principalTable: "Countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Countries",
+                columns: new[] { "Id", "Name", "ShortName" },
+                values: new object[,]
+                {
+                    { 1, "United States", "USA" },
+                    { 2, "Canada", "CA" },
+                    { 3, "Mexico", "MX" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Hotels",
+                columns: new[] { "Id", "Address", "City", "CountryId", "Name", "Rating" },
+                values: new object[,]
+                {
+                    { 1, "42 Sunset Boulevard", "Los Angeles", 1, "Hotel California", 4.5 },
+                    { 2, "123 Maple Street", "Toronto", 2, "Maple Leaf Inn", 4.0 },
+                    { 3, "456 Playa Avenue", "Cancun", 3, "Casa del Sol", 4.2000000000000002 }
                 });
 
             migrationBuilder.CreateIndex(

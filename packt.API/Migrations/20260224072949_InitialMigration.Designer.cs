@@ -11,7 +11,7 @@ using packt.API.Data;
 namespace packt.API.Migrations
 {
     [DbContext(typeof(PacktApiDBContext))]
-    [Migration("20260223150036_InitialMigration")]
+    [Migration("20260224072949_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -26,8 +26,11 @@ namespace packt.API.Migrations
 
             modelBuilder.Entity("packt.API.Data.Country", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -40,6 +43,26 @@ namespace packt.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Countries");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "United States",
+                            ShortName = "USA"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Canada",
+                            ShortName = "CA"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Mexico",
+                            ShortName = "MX"
+                        });
                 });
 
             modelBuilder.Entity("packt.API.Data.Hotel", b =>
@@ -58,19 +81,50 @@ namespace packt.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CountryId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
 
                     b.ToTable("Hotels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "42 Sunset Boulevard",
+                            City = "Los Angeles",
+                            CountryId = 1,
+                            Name = "Hotel California",
+                            Rating = 4.5
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "123 Maple Street",
+                            City = "Toronto",
+                            CountryId = 2,
+                            Name = "Maple Leaf Inn",
+                            Rating = 4.0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "456 Playa Avenue",
+                            City = "Cancun",
+                            CountryId = 3,
+                            Name = "Casa del Sol",
+                            Rating = 4.2000000000000002
+                        });
                 });
 
             modelBuilder.Entity("packt.API.Data.Hotel", b =>
