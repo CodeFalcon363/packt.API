@@ -59,15 +59,15 @@ namespace packt.API.Controllers
                 return BadRequest("Invalid Record Id");
             }
 
-            //_context.Entry(updateCountryDto).State = EntityState.Modified;
-
             var country = await _countriesRepository.GetAsync(id);
+
             if (country == null)
             {
                 return NotFound();
             }
 
             _mapper.Map(updateCountryDto, country);
+
             try
             {
                 await _countriesRepository.UpdateAsync(country);

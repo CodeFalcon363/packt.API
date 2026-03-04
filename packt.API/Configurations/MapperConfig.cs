@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using packt.API.Data;
 using packt.API.Models.Country;
+using packt.API.Models.Hotel;
 
 namespace packt.API.Configurations;
 
@@ -13,6 +14,12 @@ public class MapperConfig : Profile
         CreateMap<Country, CountryDto>().ReverseMap();
         CreateMap<Hotel, HotelDto>().ReverseMap();
         CreateMap<Country, UpdateCountryDto>().ReverseMap();
+
+        CreateMap<Hotel, CreateHotelDto>().ReverseMap();
+        CreateMap<Hotel, GetHotelDto>().ReverseMap();
+        CreateMap<Hotel, HotelDetailDto>().ReverseMap();
+        CreateMap<Country, CountryDetailDto>().ReverseMap();
+        CreateMap<Hotel, UpdateHotelDto>().ReverseMap();
     }
 }
 
