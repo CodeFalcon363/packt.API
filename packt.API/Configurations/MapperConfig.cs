@@ -2,6 +2,7 @@
 using packt.API.Data;
 using packt.API.Models.Country;
 using packt.API.Models.Hotel;
+using packt.API.Models.User;
 
 namespace packt.API.Configurations;
 
@@ -20,6 +21,9 @@ public class MapperConfig : Profile
         CreateMap<Hotel, HotelDetailDto>().ReverseMap();
         CreateMap<Country, CountryDetailDto>().ReverseMap();
         CreateMap<Hotel, UpdateHotelDto>().ReverseMap();
+
+        CreateMap<ApiUserDto, ApiUser>().ReverseMap();
+
     }
 }
 

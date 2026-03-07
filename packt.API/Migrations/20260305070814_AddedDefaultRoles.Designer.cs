@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using packt.API.Data;
 
@@ -11,9 +12,11 @@ using packt.API.Data;
 namespace packt.API.Migrations
 {
     [DbContext(typeof(PacktApiDBContext))]
-    partial class PacktApiDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260305070814_AddedDefaultRoles")]
+    partial class AddedDefaultRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace packt.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "411efdff-1929-4d3b-89c9-997395383882",
-                            Name = "Administrator",
+                            Id = "2bdfd87c-5b8a-4360-9024-5db21e492195",
+                            Name = "Adminiistrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "96e4f784-cf2d-4b42-8848-fa41ad85475e",
+                            Id = "39a9f146-bf22-46f5-a14e-14a702f94b0e",
                             Name = "User",
                             NormalizedName = "USER"
                         });

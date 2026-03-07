@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using packt.API.Data;
 
@@ -11,9 +12,11 @@ using packt.API.Data;
 namespace packt.API.Migrations
 {
     [DbContext(typeof(PacktApiDBContext))]
-    partial class PacktApiDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260305080807_SeededData")]
+    partial class SeededData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
