@@ -11,10 +11,12 @@ namespace packt.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthManager _authManager;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IAuthManager authManager)
+        public AuthController(IAuthManager authManager, ILogger<AuthController> logger)
         {
             this._authManager = authManager;
+            this._logger = logger;
         }
 
         //POST : api/Account/register
@@ -25,18 +27,30 @@ namespace packt.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Register([FromBody] ApiUserDto apiUserDto)
         {
-            var errors = await _authManager.Register(apiUserDto);
-
-            if (errors.Any())
+            _logger.LogInformation($"Registration attempt for {apiUserDto.Email}");
+            try
             {
-                foreach (var error in errors)
-                {
-                    ModelState.AddModelError(error.Code, error.Description);
-                }
-                return BadRequest(ModelState);
-            }
+                var errors = await _authManager.Register(apiUserDto);
 
-            return Ok();
+                if (errors.Any())
+                {
+                    foreach (var error in errors)
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
+                    return BadRequest(ModelState);
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(Register)}- User Registration " +
+                    $"attempt for {apiUserDto.Email}");
+
+                return Problem($"Something went wrong in the {nameof(Register)}, Please contact support.", statusCode: 500);
+            }
+            
         }
 
 
@@ -48,14 +62,25 @@ namespace packt.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
         {
-            var authResponse = await _authManager.Login(loginDto);
+            _logger.LogInformation($"Login attempt for {loginDto.Email}");
 
-            if (authResponse == null)
+            try
             {
-                return Unauthorized();
-            }
+                var authResponse = await _authManager.Login(loginDto);
 
-            return Ok(authResponse);
+                if (authResponse == null)
+                {
+                    return Unauthorized();
+                }
+
+                return Ok(authResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(Login)} - user login attempt for {loginDto.Email}");
+
+                return Problem($"Something went wrong in the {nameof(Login)}. Please contact support.", statusCode: 500);
+            }
         }
 
         //POST : api/Account/refreshtoken
@@ -66,14 +91,25 @@ namespace packt.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> RefreshToken([FromBody] AuthResponseDto request)
         {
-            var authResponse = await _authManager.VerifyRefreshToken(request);
+            _logger.LogInformation($"Refresh Token attempt for {request.UserId}");
 
-            if (authResponse == null)
+            try
             {
-                return Unauthorized();
-            }
+                var authResponse = await _authManager.VerifyRefreshToken(request);
 
-            return Ok(authResponse);
+                if (authResponse == null)
+                {
+                    return Unauthorized();
+                }
+
+                return Ok(authResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(RefreshToken)} - user refresh token attempt for {request.UserId}");
+                
+                return Problem($"Something went wrong in the {nameof(RefreshToken)}. Please contact support.", statusCode: 500);
+            }
         }
     }
 }
